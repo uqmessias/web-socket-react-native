@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/handler.ts": {
+      "runtime": "now-deno@0.1.0"
+    }
+  }
+}
