@@ -4,7 +4,7 @@ import {
   isWebSocketCloseEvent
 } from "https://deno.land/std/ws/mod.ts";
 
-const handler = async (portArg: string) => {
+export const handler = async (portArg: string) => {
   const port = Deno.args[1] || (typeof portArg === "string" ? portArg : "80");
 
   const connections = [];
@@ -54,5 +54,3 @@ const handler = async (portArg: string) => {
     }
   });
 };
-
-handler("8080");

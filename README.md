@@ -11,7 +11,7 @@ After you have installed it, you need to start the `WebSocket` and you can do th
 # If everthing went sucessfuly, you must see the message:
 # "WebSocket server is running on :8008"
 # it means the server is running on "ws://localhost:8080"
-deno --allow-net ./web-socket-server/index.ts
+deno --allow-net ./web-socket-server/api/index.ts
 ```
 
 ## Running WebSocket client with [React Native](https://facebook.github.io/react-native/)
