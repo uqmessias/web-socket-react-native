@@ -40,3 +40,7 @@ If the `WebSocket` client didn't connect, try to reload your app by shaking your
 adb shell input text "RR"
 ```
 
+It will look like this:
+
+![WebSocket demo](./web-socket-demo.gif)
+
