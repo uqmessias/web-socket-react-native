@@ -1,11 +1,11 @@
-import { listenAndServe } from "https://deno.land/std/http/server.ts";
+import { listenAndServe } from 'https://deno.land/std/http/server.ts';
 import {
   acceptWebSocket,
-  isWebSocketCloseEvent
-} from "https://deno.land/std/ws/mod.ts";
+  isWebSocketCloseEvent,
+} from 'https://deno.land/std/ws/mod.ts';
 
 const handler = async (portArg: string) => {
-  const port = Deno.args[1] || (typeof portArg === "string" ? portArg : "80");
+  const port = Deno.args[1] || (typeof portArg === 'string' ? portArg : '80');
 
   const connections = [];
 
@@ -24,9 +24,9 @@ const handler = async (portArg: string) => {
         conn,
         headers,
         bufReader: req.r,
-        bufWriter: req.w
+        bufWriter: req.w,
       });
-      console.log("socket connected!");
+      console.log('socket connected!');
       connections.push(sock);
       const it = sock.receive();
       while (true) {
@@ -41,7 +41,7 @@ const handler = async (portArg: string) => {
             const { code, reason } = ev;
             const index = connections.indexOf(sock);
             connections.splice(index, 1);
-            console.log("ws:Close", code, reason);
+            console.log('ws:Close', code, reason);
           }
         } catch (e) {
           console.error(`failed to receive frame: ${e}`);
@@ -55,4 +55,4 @@ const handler = async (portArg: string) => {
   });
 };
 
-handler("8080");
+handler('8080');

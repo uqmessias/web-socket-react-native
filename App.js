@@ -16,9 +16,9 @@ import {
   StatusBar,
 } from 'react-native';
 
-import {Header, Colors} from 'react-native/Libraries/NewAppScreen';
+import { Header, Colors } from 'react-native/Libraries/NewAppScreen';
 
-import {format} from 'date-fns';
+import { format } from 'date-fns';
 
 const styles = StyleSheet.create({
   scrollView: {
@@ -46,12 +46,12 @@ const styles = StyleSheet.create({
 
 const App: () => React$Node = () => {
   const [time, setTime] = React.useState(undefined);
-  const handleMessage = React.useCallback(({data}) => {
+  const handleMessage = React.useCallback(({ data }) => {
     try {
       const date = new Date(data);
       setTime(date);
     } catch (err) {
-      console.warn('error data', {data});
+      console.warn('error data', { data });
     }
   }, []);
 
@@ -62,7 +62,7 @@ const App: () => React$Node = () => {
     };
     ws.onmessage = handleMessage;
     ws.onerror = err => {
-      console.warn('onerror', {err});
+      console.warn('onerror', { err });
     };
     ws.onclose = () => {
       console.warn('closed');
@@ -72,11 +72,12 @@ const App: () => React$Node = () => {
   }, [handleMessage]);
   return (
     <>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar barStyle='dark-content' />
       <SafeAreaView>
         <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
+          contentInsetAdjustmentBehavior='automatic'
+          style={styles.scrollView}
+        >
           <Header />
           <View style={styles.body}>
             {!!time && (
