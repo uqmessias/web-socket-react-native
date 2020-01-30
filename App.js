@@ -15,10 +15,9 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-
 import { Header, Colors } from 'react-native/Libraries/NewAppScreen';
 
-import { format } from 'date-fns';
+import formatDate from './web-socket-server/formatDate';
 
 const styles = StyleSheet.create({
   scrollView: {
@@ -46,6 +45,7 @@ const styles = StyleSheet.create({
 
 const App: () => React$Node = () => {
   const [time, setTime] = React.useState(undefined);
+  const [formattedDate, setFormattedDate] = React.useState(undefined);
   const handleMessage = React.useCallback(({ data }) => {
     try {
       const date = new Date(data);
@@ -54,6 +54,18 @@ const App: () => React$Node = () => {
       console.warn('error data', { data });
     }
   }, []);
+
+  React.useEffect(() => {
+    if (!time){
+      return;
+    }
+
+    const intervalId = setInterval(() => {
+      setFormattedDate(formatDate(time));
+    }, 20);
+
+    return clearInterval.bind(null, intervalId);
+  }, [time]);
 
   React.useEffect(() => {
     const ws = new WebSocket('ws://localhost:8080');
@@ -80,12 +92,10 @@ const App: () => React$Node = () => {
         >
           <Header />
           <View style={styles.body}>
-            {!!time && (
+            {!!formattedDate && (
               <View style={styles.sectionContainer}>
                 <Text style={styles.sectionTitle}>Timer</Text>
-                <Text style={styles.sectionDescription}>
-                  {format(time, 'yyyy/MM/dd H:mm:ss.SSS') + ' '}
-                </Text>
+                <Text style={styles.sectionDescription}>{formattedDate}</Text>
               </View>
             )}
           </View>
