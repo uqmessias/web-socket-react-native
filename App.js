@@ -45,7 +45,15 @@ const styles = StyleSheet.create({
 
 const App: () => React$Node = () => {
   const [time, setTime] = React.useState(undefined);
+  const [isConnecting, setIsConnecting] = React.useState(true);
   const [formattedDate, setFormattedDate] = React.useState(undefined);
+  const [wsConnectionCount, setWsConnectionCount] = React.useState(0);
+  const handleIncrementPress = React.useCallback(() => {
+    if (isConnecting) {
+      return;
+    }
+    setWsConnectionCount(wsConnectionCount + 1);
+  }, [isConnecting, wsConnectionCount]);
   const handleMessage = React.useCallback(({ data }) => {
     try {
       const date = new Date(data);
@@ -56,7 +64,7 @@ const App: () => React$Node = () => {
   }, []);
 
   React.useEffect(() => {
-    if (!time){
+    if (!time) {
       return;
     }
 
@@ -69,19 +77,24 @@ const App: () => React$Node = () => {
 
   React.useEffect(() => {
     const ws = new WebSocket('ws://localhost:8080');
+    setIsConnecting(true);
     ws.onopen = async () => {
       console.warn('open');
+      setIsConnecting(false);
     };
     ws.onmessage = handleMessage;
     ws.onerror = err => {
       console.warn('onerror', { err });
+      setIsConnecting(false);
     };
+
     ws.onclose = () => {
       console.warn('closed');
+      setIsConnecting(false);
     };
 
     return ws.close.bind(ws);
-  }, [handleMessage]);
+  }, [handleMessage, wsConnectionCount]);
   return (
     <>
       <StatusBar barStyle='dark-content' />
@@ -92,12 +105,15 @@ const App: () => React$Node = () => {
         >
           <Header />
           <View style={styles.body}>
-            {!!formattedDate && (
-              <View style={styles.sectionContainer}>
-                <Text style={styles.sectionTitle}>Timer</Text>
-                <Text style={styles.sectionDescription}>{formattedDate}</Text>
-              </View>
-            )}
+            <View style={styles.sectionContainer}>
+              <Text style={styles.sectionTitle}>Countdown</Text>
+              <Text style={styles.sectionDescription} onPress={handleIncrementPress}>
+                {formattedDate ??
+                  (isConnecting
+                    ? 'Connecting...'
+                    : `Tap here to retry the connection [${wsConnectionCount}]`)}
+              </Text>
+            </View>
           </View>
         </ScrollView>
       </SafeAreaView>
